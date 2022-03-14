@@ -25,7 +25,7 @@
     "start": "npx next start",
     "test": "yarn test:lint && yarn test:build && yarn test:unit",
     "test:lint": "eslint --ext js,ts,tsx .",
-    "test:e2e": "playwright test -c ./config/playwright.config.ts",
+    "test:e2e": "cross-env PW_EXPERIMENTAL_TS_ESM=1 playwright test -c ./config/playwright.config.ts",
     "test:type": "tsc",
     "test:unit": "jest --config=./config/jest.config.js --detectOpenHandles",
     "test:unit:watch": "yarn test:unit --watch"
@@ -49,7 +49,7 @@
     "ace-builds": "1.4.14",
     "apollo-server-micro": "3.6.3",
     "aws-sdk": "2.1062.0",
-    "bhala": "2.1.0",
+    "bhala": "3.0.4",
     "classnames": "2.3.1",
     "cuid": "2.1.8",
     "dayjs": "1.10.8",

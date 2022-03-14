@@ -1,5 +1,5 @@
 import { JobState } from '@prisma/client'
-import ß from 'bhala'
+import { B } from 'bhala'
 import { createWriteStream } from 'fs'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import * as R from 'ramda'
@@ -10,7 +10,7 @@ import getPrisma from '../../api/helpers/getPrisma'
 const MAIN_PATHS = ['/', '/donnees-personnelles-et-cookies', '/emplois', '/institutions', '/mentions-legales']
 
 async function generateSitemap() {
-  ß.info('[scripts/build/generateSitemap.js] Fetching jobs…')
+  B.info('[scripts/build/generateSitemap.js] Fetching jobs…')
   const jobs = await getPrisma().job.findMany({
     where: {
       NOT: {
@@ -28,10 +28,10 @@ async function generateSitemap() {
   })
   const allJobs = R.uniqBy(R.prop('slug'))([...jobs, ...legacyJobs])
 
-  ß.info('[scripts/build/generateSitemap.js] Fetching institutions…')
+  B.info('[scripts/build/generateSitemap.js] Fetching institutions…')
   const institutions = await getPrisma().legacyInstitution.findMany()
 
-  ß.info('[scripts/build/generateSitemap.js] Fetching archived jobs…')
+  B.info('[scripts/build/generateSitemap.js] Fetching archived jobs…')
   const archivedJobs = await getPrisma().archivedJob.findMany()
 
   const sitemap = new SitemapStream({
@@ -41,37 +41,37 @@ async function generateSitemap() {
   const writeStream = createWriteStream('./public/sitemap.xml')
   sitemap.pipe(writeStream)
 
-  ß.info('[scripts/build/generateSitemap.js] Mapping main pages…')
+  B.info('[scripts/build/generateSitemap.js] Mapping main pages…')
   MAIN_PATHS.forEach(path => {
     sitemap.write({
       url: path,
     })
   })
-  ß.success(`[scripts/build/generateSitemap.js] ${MAIN_PATHS.length} main pages mapped.`)
+  B.success(`[scripts/build/generateSitemap.js] ${MAIN_PATHS.length} main pages mapped.`)
 
-  ß.info('[scripts/build/generateSitemap.js] Mapping jobs…')
+  B.info('[scripts/build/generateSitemap.js] Mapping jobs…')
   allJobs.forEach(({ slug }) => {
     sitemap.write({
       url: `/emploi/${slug}`,
     })
   })
-  ß.success(`[scripts/build/generateSitemap.js] ${allJobs.length} jobs mapped.`)
+  B.success(`[scripts/build/generateSitemap.js] ${allJobs.length} jobs mapped.`)
 
-  ß.info('[scripts/build/generateSitemap.js] Mapping institutions…')
+  B.info('[scripts/build/generateSitemap.js] Mapping institutions…')
   institutions.forEach(({ slug }) => {
     sitemap.write({
       url: `/institution/${slug}`,
     })
   })
-  ß.success(`[scripts/build/generateSitemap.js] ${institutions.length} institutions mapped.`)
+  B.success(`[scripts/build/generateSitemap.js] ${institutions.length} institutions mapped.`)
 
-  ß.info('[scripts/build/generateSitemap.js] Mapping archived jobs…')
+  B.info('[scripts/build/generateSitemap.js] Mapping archived jobs…')
   archivedJobs.forEach(({ slug }) => {
     sitemap.write({
       url: `/emploi/archive/${slug}`,
     })
   })
-  ß.success(`[scripts/build/generateSitemap.js] ${archivedJobs.length} archived jobs mapped.`)
+  B.success(`[scripts/build/generateSitemap.js] ${archivedJobs.length} archived jobs mapped.`)
 
   sitemap.end()
   setInterval(process.exit, 2000)

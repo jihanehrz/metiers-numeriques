@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/nextjs'
-import ß from 'bhala'
+import { B } from 'bhala'
 import { NextApiResponse } from 'next'
 
 import ApiError from '../../api/libs/ApiError'
@@ -52,15 +52,15 @@ function handleError(error: any, path: string, isFinalOrRes?: boolean | NextApiR
 
     default:
       // eslint-disable-next-line no-case-declarations
-      ß.error(`[common/helpers/handleError()] This type of error cannot be processed. This should never happen.`)
-      ß.error(`[common/helpers/handleError()] Error Type: ${typeof error}`)
-      ß.error(`[common/helpers/handleError()] Error Constructor: ${getErrorConstructorName(error)}`)
+      B.error(`[common/helpers/handleError()] This type of error cannot be processed. This should never happen.`)
+      B.error(`[common/helpers/handleError()] Error Type: ${typeof error}`)
+      B.error(`[common/helpers/handleError()] Error Constructor: ${getErrorConstructorName(error)}`)
       errorString = String(error)
   }
 
   // There is no need to cluster the log with handled errors
   if (!(error instanceof ApiError)) {
-    ß.error(`[${path}] ${errorString}`)
+    B.error(`[${path}] ${errorString}`)
     // eslint-disable-next-line no-console
     console.error(error)
   }

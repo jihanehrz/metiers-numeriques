@@ -1,5 +1,5 @@
 import { ApolloClient, gql, HttpLink, InMemoryCache } from '@apollo/client'
-import ß from 'bhala'
+import { B } from 'bhala'
 import fetch from 'cross-fetch'
 import * as R from 'ramda'
 
@@ -19,16 +19,16 @@ async function synchronize() {
   })
   const prisma = getPrisma()
 
-  ß.info('[scripts/dev/synchronize.js] Deleting old legacy jobs…')
+  B.info('[scripts/dev/synchronize.js] Deleting old legacy jobs…')
   await prisma.legacyJob.deleteMany()
 
-  ß.info('[scripts/dev/synchronize.js] Deleting old legacy services…')
+  B.info('[scripts/dev/synchronize.js] Deleting old legacy services…')
   await prisma.legacyService.deleteMany()
 
-  ß.info('[scripts/dev/synchronize.js] Deleting old legacy entities…')
+  B.info('[scripts/dev/synchronize.js] Deleting old legacy entities…')
   await prisma.legacyEntity.deleteMany()
 
-  ß.info('[scripts/dev/synchronize.js] Fetching legacy jobs…')
+  B.info('[scripts/dev/synchronize.js] Fetching legacy jobs…')
   const getLegacyJobs = async (pageIndex = 0, previousLegacyJobs: any[] = []): Promise<any[]> => {
     const {
       data: {
@@ -104,12 +104,12 @@ async function synchronize() {
     legacyServices.map(legacyService => legacyService.legacyEntity).filter(legacyService => legacyService !== null),
   )
 
-  ß.info('[scripts/dev/synchronize.js] Saving new legacy entities…')
+  B.info('[scripts/dev/synchronize.js] Saving new legacy entities…')
   await prisma.legacyEntity.createMany({
     data: omitTypenameProp(legacyEntities),
   })
 
-  ß.info('[scripts/dev/synchronize.js] Saving new legacy services…')
+  B.info('[scripts/dev/synchronize.js] Saving new legacy services…')
   await prisma.legacyService.createMany({
     data: omitTypenameProp(
       legacyServices.map(({ legacyEntity, ...rest }) => ({
@@ -119,7 +119,7 @@ async function synchronize() {
     ),
   })
 
-  ß.info('[scripts/dev/synchronize.js] Saving new legacy jobs…')
+  B.info('[scripts/dev/synchronize.js] Saving new legacy jobs…')
   await prisma.legacyJob.createMany({
     data: omitTypenameProp(
       legacyJobs.map(({ legacyService, ...rest }) => ({
