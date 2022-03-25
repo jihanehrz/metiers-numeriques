@@ -13,7 +13,7 @@ import { GlobalStyle, ThemeProvider } from '@singularity/core'
 import { AuthProvider } from 'nexauth/client'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { createGlobalStyle } from 'styled-components'
+import styled, { createGlobalStyle } from 'styled-components'
 
 import '@fontsource/poppins/300.css'
 import '@fontsource/poppins/400.css'
@@ -52,6 +52,10 @@ const GlobalStyleCustom = createGlobalStyle`
   }
 `
 
+const WebsiteMain = styled.main`
+  background-color: #f5f5f5;
+`
+
 const PRIVATE_PATHS = [/^\/admin($|\/)/]
 
 export default function MetiersNumeriquesApp({ Component, pageProps: { session, ...pageProps } }) {
@@ -79,13 +83,6 @@ export default function MetiersNumeriquesApp({ Component, pageProps: { session, 
           property="og:description"
         />
         <meta content="/images/main-illu.png" property="og:image" />
-
-        {!isAdministrationSpace && (
-          <>
-            <link href="/dsfr.min.css" rel="stylesheet" />
-            <link href="/legacy.css" rel="stylesheet" />
-          </>
-        )}
       </Head>
 
       <ThemeProvider>
@@ -97,10 +94,10 @@ export default function MetiersNumeriquesApp({ Component, pageProps: { session, 
             {!isAdministrationSpace && (
               <>
                 <Header />
-                <main>
+                <WebsiteMain>
                   {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                   <Component {...pageProps} />
-                </main>
+                </WebsiteMain>
                 <Footer />
 
                 <>

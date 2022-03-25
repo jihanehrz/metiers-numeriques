@@ -110,7 +110,7 @@ export const JOB_STATE_LABEL: Record<JobState, string> = {
 
 export const JOB_STATES_AS_OPTIONS = mapLabelObjectToSelectOptions(JOB_STATE_LABEL)
 
-export enum REGION {
+export enum Region {
   'Auvergne-Rhône-Alpes' = 'Auvergne-Rhône-Alpes',
   'Bourgogne-Franche-Comté' = 'Bourgogne-Franche-Comté',
   'Bretagne' = 'Bretagne',
@@ -131,7 +131,7 @@ export enum REGION {
   'Île-de-France' = 'Île-de-France',
 }
 
-export const REGIONS_AS_OPTIONS: Common.App.SelectOption<keyof typeof REGION>[] = [
+export const REGIONS_AS_OPTIONS: Common.App.SelectOption<keyof typeof Region>[] = [
   {
     label: `Auvergne-Rhône-Alpes`,
     value: `Auvergne-Rhône-Alpes`,

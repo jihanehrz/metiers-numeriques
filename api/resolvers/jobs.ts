@@ -2,10 +2,11 @@ import buildPrismaPaginationFilter from '@api/helpers/buildPrismaPaginationFilte
 import buildPrismaWhereFilter from '@api/helpers/buildPrismaWhereFilter'
 import getPrisma from '@api/helpers/getPrisma'
 import handleError from '@common/helpers/handleError'
-import { JobState, UserRole } from '@prisma/client'
+import { JobContractType, JobRemoteStatus, JobState, UserRole } from '@prisma/client'
 import dayjs from 'dayjs'
 
 import type { Context, GetAllArgs, GetAllResponse } from './types'
+import type { Region } from '@common/constants'
 import type { Address, Contact, Job, Prisma, Profession, Recruiter } from '@prisma/client'
 
 export type JobFromGetOne = Job & {
@@ -291,12 +292,14 @@ export const query = {
   getPublicJobs: async (
     obj,
     queryArgs: GetAllArgs & {
+      contractTypes?: JobContractType[]
       professionId?: string
-      region?: string
+      region?: Region
+      remoteStatuses?: JobRemoteStatus[]
     },
   ): Promise<GetAllResponse<JobFromGetPublicJobs>> => {
     try {
-      const { pageIndex, perPage, professionId, query, region } = queryArgs
+      const { contractTypes, pageIndex, perPage, professionId, query, region, remoteStatuses } = queryArgs
 
       const throttledPerPage = perPage <= PUBLIC_PER_PAGE_THROTTLE ? perPage : 1
 
@@ -308,11 +311,21 @@ export const query = {
         },
         state: JobState.PUBLISHED,
       }
+      if (contractTypes !== undefined && contractTypes.length > 0) {
+        andFilter.contractTypes = {
+          hasSome: contractTypes,
+        }
+      }
       if (professionId !== undefined) {
         andFilter.professionId = professionId
       }
       if (region !== undefined) {
         andFilter.address = { region }
+      }
+      if (remoteStatuses !== undefined && remoteStatuses.length > 0) {
+        andFilter.remoteStatus = {
+          in: remoteStatuses,
+        }
       }
       const whereFilter = buildPrismaWhereFilter<JobFromGetPublicJobs>(['title'], query, andFilter)
 
